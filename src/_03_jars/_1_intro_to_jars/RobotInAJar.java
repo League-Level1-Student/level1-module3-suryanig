@@ -1,6 +1,6 @@
 package _03_jars._1_intro_to_jars;
 
-import java.awt.Robot;
+import org.jointheleague.graphical.robot.Robot;
 
 public class RobotInAJar {
 	
@@ -59,7 +59,12 @@ public class RobotInAJar {
 	
 	public void draw() {
 		/*** Write code to make your robot draw a shape here ****/
-		
+		rob.penDown();
+		rob.setSpeed(20);
+		for(int i=0;i<4;i++) {
+		rob.move(100);
+		rob.turn(90);
+		}
 		
 	}
 }
