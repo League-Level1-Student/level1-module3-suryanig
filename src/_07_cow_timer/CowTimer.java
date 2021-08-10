@@ -4,9 +4,10 @@ package _07_cow_timer;
  *    Level 1
  */
 
-import java.applet.AudioClip;
-import java.io.IOException;
-import javax.swing.JApplet;
+import java.io.File;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class CowTimer {
 
@@ -30,6 +31,8 @@ public class CowTimer {
 		 * of minutes using Thread.sleep(int milliseconds).
 		 */
 
+Thread.sleep(minutes*1000);
+playSound("moo.wav");
 		/*
 		 * 3. When the timer is finished, use the playSound method to play a moo sound.
 		 * You can use the .wav file in the default package, or you can download one
@@ -37,12 +40,29 @@ public class CowTimer {
 		 */
 
 	}
-
+boolean canPlaySounds = true;
 	private void playSound(String fileName) {
-		AudioClip sound = JApplet.newAudioClip(getClass().getResource(fileName));
-		sound.play();
-	}
-
+		
+			if (canPlaySounds) {	
+				File sound = new File("src/_07_cow_timer/"+fileName);
+				if (sound.exists()) {
+					new Thread(() -> {
+					try {
+						Clip clip = AudioSystem.getClip();
+						clip.open(AudioSystem.getAudioInputStream(sound));
+						clip.start();
+						Thread.sleep(clip.getMicrosecondLength()/1000);
+					}
+					catch (Exception e) {
+						System.out.println("Could not play this sound");
+					}}).start();
+		 		}
+				else {
+					System.out.println("File does not exist");
+				}
+			}
+		}
+	
 	static void speak(String words) {
 		if (System.getProperty("os.name").contains("Windows")) {
 			String cmd = "PowerShell -Command \"Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('"
